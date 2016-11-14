@@ -30,6 +30,7 @@
         {
             this.ConnectButton = new System.Windows.Forms.Button();
             this.HostTextBox = new System.Windows.Forms.TextBox();
+            this.NameTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // ConnectButton
@@ -50,11 +51,20 @@
             this.HostTextBox.TabIndex = 1;
             this.HostTextBox.Text = "localhost";
             // 
+            // NameTextBox
+            // 
+            this.NameTextBox.Location = new System.Drawing.Point(104, 149);
+            this.NameTextBox.Name = "NameTextBox";
+            this.NameTextBox.Size = new System.Drawing.Size(115, 22);
+            this.NameTextBox.TabIndex = 2;
+            this.NameTextBox.Text = "name";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(316, 304);
+            this.Controls.Add(this.NameTextBox);
             this.Controls.Add(this.HostTextBox);
             this.Controls.Add(this.ConnectButton);
             this.Name = "Form1";
@@ -68,6 +78,7 @@
 
         private System.Windows.Forms.Button ConnectButton;
         private System.Windows.Forms.TextBox HostTextBox;
+        private System.Windows.Forms.TextBox NameTextBox;
     }
 }
 

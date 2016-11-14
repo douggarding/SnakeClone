@@ -16,13 +16,11 @@ namespace ClientView
     public partial class Form1 : Form
     {
         private SocketState theServer;
+
         public Form1()
         {
             InitializeComponent();
         }
-
-        private delegate void ConnectDelegate(SocketState ss);
-        private delegate void ReceiveDelegate(IAsyncResult ar);
 
         private static void ProcessMessage(SocketState ss)
         {
@@ -54,18 +52,30 @@ namespace ClientView
             }
         }
 
-        private static void ReceiveCallback(IAsyncResult ar)
+        private void FirstContact(SocketState ss)
         {
-            Console.Out.WriteLine("recieved");
+            Console.Out.WriteLine("First Contact");
+            ss.callbackFunction = RecieveStartup;
+            Networking.Send(ss, NameTextBox.Text);
         }
 
-        ConnectDelegate connect = ProcessMessage;
-        ReceiveDelegate recieve = ReceiveCallback;
+        private void RecieveStartup(SocketState ss)
+        {
+            Console.Out.WriteLine("Recieve Startup");
+            ss.callbackFunction = RecieveWorld;
+            Networking.GetData(ss);
+
+        }
+
+        private static void RecieveWorld(SocketState ss)
+        {
+            Console.Out.WriteLine("RecieveWorld");
+            Networking.GetData(ss);
+        }
 
         private void ConnectButton_Click(object sender, EventArgs e)
         {
-            theServer = Networking.ConnectToServer(connect, HostTextBox.Text);
+            theServer = Networking.ConnectToServer(FirstContact, HostTextBox.Text);
         }
-
     }
 }

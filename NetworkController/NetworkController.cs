@@ -18,7 +18,7 @@ namespace NetworkController
     {
         public Socket theSocket;
         public int ID;
-        public Delegate callbackFunction;
+        public Action<SocketState> callbackFunction;
 
         // This is the buffer where we will receive message data from the client
         public byte[] messageBuffer = new byte[1024];
@@ -26,11 +26,10 @@ namespace NetworkController
         // This is a larger (growable) buffer, in case a single receive does not contain the full message.
         public StringBuilder sb = new StringBuilder();
 
-        public SocketState(Socket s, int id, Delegate cb)
+        internal SocketState(Socket s, int id)
         {
             theSocket = s;
             ID = id;
-            callbackFunction = cb;
         }
     }
 
@@ -39,7 +38,7 @@ namespace NetworkController
         public const int DEFAULT_PORT = 11000;
         private static SocketState theServer;
 
-        public static SocketState ConnectToServer(Delegate callbackFunction, string hostName)
+        public static SocketState ConnectToServer(Action<SocketState> cb, string hostName)
         {
             System.Diagnostics.Debug.WriteLine("connecting  to " + hostName);
 
@@ -82,11 +81,11 @@ namespace NetworkController
 
                 socket.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.IPv6Only, false);
 
-                theServer = new SocketState(socket, -1, callbackFunction);
+                theServer = new SocketState(socket, -1);
+
+                theServer.callbackFunction = cb;
 
                 theServer.theSocket.BeginConnect(ipAddress, Networking.DEFAULT_PORT, ConnectedToServer, theServer);
-
-                theServer.callbackFunction = callbackFunction;
 
                 return theServer;
 
@@ -107,6 +106,8 @@ namespace NetworkController
             {
                 // Complete the connection.
                 ss.theSocket.EndConnect(state_in_an_ar_object);
+                ss.callbackFunction(theServer);
+                ss.theSocket.BeginReceive(ss.messageBuffer, 0, ss.messageBuffer.Length, SocketFlags.None, ReceiveCallback, ss);
             }
             catch (Exception e)
             {
@@ -114,14 +115,54 @@ namespace NetworkController
                 return;
             }
 
-            // TODO: If we had a "EventProcessor" delagate stored in the state, we could call that,
-            //       instead of hard-coding a method to call.
-            //AwaitDataFromServer(ss);
+        }
+
+        private static void ReceiveCallback(IAsyncResult ar)
+        {
+            SocketState ss = (SocketState)ar.AsyncState;
+
+            int bytesRead = ss.theSocket.EndReceive(ar);
+
+            // If the socket is still open
+            if (bytesRead > 0)
+            {
+                string theMessage = Encoding.UTF8.GetString(ss.messageBuffer, 0, bytesRead);
+                // Append the received data to the growable buffer.
+                // It may be an incomplete message, so we need to start building it up piece by piece
+                ss.sb.Append(theMessage);
+                ss.callbackFunction(ss);
+            }
+
+            // Continue the "event loop" that was started on line 154.
+            // Start listening for more parts of a message, or more new messages
+           // ss.theSocket.BeginReceive(ss.messageBuffer, 0, ss.messageBuffer.Length, SocketFlags.None, ReceiveCallback, ss);
         }
 
         // TODO: Move all networking code to this class.
         // Networking code should be completely general-purpose, and useable by any other application.
         // It should contain no references to a specific project.
+        public static void GetData(SocketState ss)
+        {
+            ss.theSocket.BeginReceive(ss.messageBuffer, 0, ss.messageBuffer.Length, SocketFlags.None, ReceiveCallback, ss);
+        }
+        public static void Send(SocketState ss, string data)
+        {
+            byte[] messageBytes = Encoding.UTF8.GetBytes(data + "\n");
+            theServer.theSocket.BeginSend(messageBytes, 0, messageBytes.Length, SocketFlags.None, SendCallback, theServer);
+        }
+        /// <summary>
+        /// A callback invoked when a send operation completes
+        /// </summary>
+        /// <param name="ar"></param>
+        private static void SendCallback(IAsyncResult ar)
+        {
+            SocketState ss = (SocketState)ar.AsyncState;
+            // Nothing much to do here, just conclude the send operation so the socket is happy.
+            ss.theSocket.EndSend(ar);
+            Console.WriteLine("data has been sent");
+        }
     }
+
+
 
 }
