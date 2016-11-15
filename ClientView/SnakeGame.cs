@@ -14,12 +14,12 @@ using Snake;
 
 namespace ClientView
 {
-    public partial class Form1 : Form
+    public partial class SnakeGame : Form
     {
         private SocketState theServer;
         private World world;
 
-        public Form1()
+        public SnakeGame()
         {
             InitializeComponent();
         }
@@ -28,14 +28,26 @@ namespace ClientView
         {
             Console.Out.WriteLine("First Contact");
             ss.callbackFunction = RecieveStartup;
+            //Sends the server the players name
             Networking.Send(ss, NameTextBox.Text+'\n');
         }
 
         private void RecieveStartup(SocketState ss)
         {
             Console.Out.WriteLine("Recieve Startup");
-            String[] world = ss.sb.ToString().Split('\n');
-            this.world = new World(int.Parse(world[1]), int.Parse(world[2]));
+            //Recieves the world parameters in the string builder seperated by \n characters. The first number is the players ID #.
+            //the second and third numbers ar the width and height of the world
+            String[] worldParameters = ss.sb.ToString().Split('\n');
+            //Initializes the world
+            world = new World(int.Parse(worldParameters[1]), int.Parse(worldParameters[2]));
+            gamePanel.SetWorld(world);
+            //Sets the gamePanel and window to the correct size
+            this.Invoke(new MethodInvoker(
+            () => gamePanel.Size = new Size(world.width * World.pixelsPerCell, world.height * World.pixelsPerCell)
+            ));
+            this.Invoke(new MethodInvoker(
+            () => this.Size = new Size(world.width * World.pixelsPerCell + 50, world.height * World.pixelsPerCell +100 )
+            ));
             ss.callbackFunction = RecieveWorld;
             Networking.GetData(ss);
 

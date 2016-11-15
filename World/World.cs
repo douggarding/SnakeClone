@@ -16,7 +16,7 @@ namespace Snake
     public class World
     {
         // Determines the size in pixels of each grid cell in the world
-        public const int pixelsPerCell = 5;
+        public const int pixelsPerCell = 3;
 
         // Width of the world in cells (not pixels)
         public int width
