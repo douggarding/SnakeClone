@@ -35,7 +35,7 @@
             // 
             // ConnectButton
             // 
-            this.ConnectButton.Location = new System.Drawing.Point(104, 28);
+            this.ConnectButton.Location = new System.Drawing.Point(12, 12);
             this.ConnectButton.Name = "ConnectButton";
             this.ConnectButton.Size = new System.Drawing.Size(101, 53);
             this.ConnectButton.TabIndex = 0;
@@ -45,7 +45,7 @@
             // 
             // HostTextBox
             // 
-            this.HostTextBox.Location = new System.Drawing.Point(104, 106);
+            this.HostTextBox.Location = new System.Drawing.Point(128, 27);
             this.HostTextBox.Name = "HostTextBox";
             this.HostTextBox.Size = new System.Drawing.Size(115, 22);
             this.HostTextBox.TabIndex = 1;
@@ -53,7 +53,7 @@
             // 
             // NameTextBox
             // 
-            this.NameTextBox.Location = new System.Drawing.Point(104, 149);
+            this.NameTextBox.Location = new System.Drawing.Point(283, 27);
             this.NameTextBox.Name = "NameTextBox";
             this.NameTextBox.Size = new System.Drawing.Size(115, 22);
             this.NameTextBox.TabIndex = 2;
@@ -63,7 +63,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(316, 304);
+            this.ClientSize = new System.Drawing.Size(621, 487);
             this.Controls.Add(this.NameTextBox);
             this.Controls.Add(this.HostTextBox);
             this.Controls.Add(this.ConnectButton);
