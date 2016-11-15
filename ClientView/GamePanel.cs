@@ -16,10 +16,8 @@ namespace Snake
     /// </summary>
     public class DrawingPanel : Panel
     {
-
         /// We need a reference to the world, so we can draw the objects in it
         private World world;
-
 
         public DrawingPanel()
         {
@@ -48,26 +46,28 @@ namespace Snake
 
             using (System.Drawing.SolidBrush drawBrush = new System.Drawing.SolidBrush(Color.Black))
             {
+                // Constructor for Rectangle(x-coordinate, y-coordinate, width, height) should be in relation
+                // to the upper left-hand corner of the panel. I'm not sure why coordinates 0,0 does not 
+                // produce the same coordinates when painted between the top and left walls.
 
                 // Turn on anti-aliasing for smooth round edges
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-                // Draw the top wall
+                // Draw top wall
                 Rectangle topWall = new Rectangle(0, 0, Size.Width * World.pixelsPerCell, World.pixelsPerCell);
                 e.Graphics.FillRectangle(drawBrush, topWall);
 
-                // Draw the right wall
+                // Draw right wall
                 Rectangle rightWall = new Rectangle((world.width - 1) * World.pixelsPerCell, 0, World.pixelsPerCell, world.height * World.pixelsPerCell);
                 e.Graphics.FillRectangle(drawBrush, rightWall);
 
-                //TODO: Draw other walls
-                Rectangle bottomWall = new Rectangle(0, world.height * World.pixelsPerCell, Size.Width * World.pixelsPerCell, World.pixelsPerCell);
+                // Draw bottom wall
+                Rectangle bottomWall = new Rectangle(0, (world.height - 1) * World.pixelsPerCell, world.width * World.pixelsPerCell, World.pixelsPerCell);
                 e.Graphics.FillRectangle(drawBrush, bottomWall);
 
-                // Draw the right wall
-                Rectangle leftWall = new Rectangle(1 * World.pixelsPerCell, 0, World.pixelsPerCell, world.height * World.pixelsPerCell);
+                // Draw left wall
+                Rectangle leftWall = new Rectangle(0, 0, World.pixelsPerCell, Size.Height * World.pixelsPerCell);
                 e.Graphics.FillRectangle(drawBrush, leftWall);
-
             }
 
             // Draw the "world" (just one dot) within this panel by using the PaintEventArgs

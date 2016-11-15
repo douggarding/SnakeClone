@@ -10,13 +10,13 @@ namespace Snake
 {
 
     /// <summary>
-    /// This represents a simple demo of a world that just contains one "dot"
-    /// A more interesting SnakeWorld would contain multiple snakes and food
+    /// This represents a world for the game snake, which can contain both
+    /// Snake and Food objects.
     /// </summary>
     public class World
     {
         // Determines the size in pixels of each grid cell in the world
-        public const int pixelsPerCell = 3;
+        public const int pixelsPerCell = 5;
 
         // Width of the world in cells (not pixels)
         public int width
