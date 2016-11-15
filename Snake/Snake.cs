@@ -51,6 +51,5 @@ namespace Snake
         {
             return false;
         }
-
     }
 }
