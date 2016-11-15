@@ -31,7 +31,7 @@
             this.ConnectButton = new System.Windows.Forms.Button();
             this.HostTextBox = new System.Windows.Forms.TextBox();
             this.NameTextBox = new System.Windows.Forms.TextBox();
-            this.gamePanel = new Snake.DrawingPanel();
+            this.gamePanel = new Food.DrawingPanel();
             this.SuspendLayout();
             // 
             // ConnectButton
@@ -88,7 +88,7 @@
         private System.Windows.Forms.Button ConnectButton;
         private System.Windows.Forms.TextBox HostTextBox;
         private System.Windows.Forms.TextBox NameTextBox;
-        private Snake.DrawingPanel gamePanel;
+        private Food.DrawingPanel gamePanel;
     }
 }
 

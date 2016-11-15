@@ -17,6 +17,9 @@ namespace Snake
     {
         // Determines the size in pixels of each grid cell in the world
         public const int pixelsPerCell = 5;
+        // This represents the "objects" in the world (just one dot)
+        private int dotX;
+        private int dotY;
 
         // Width of the world in cells (not pixels)
         public int width
@@ -32,10 +35,12 @@ namespace Snake
             private set;
         }
 
-        // This represents the "objects" in the world (just one dot)
-        private int dotX;
-        private int dotY;
 
+        /// <summary>
+        /// Constructor for a world object. Determined by a height and width.
+        /// </summary>
+        /// <param name="w"></param>
+        /// <param name="h"></param>
         public World(int w, int h)
         {
             width = w;

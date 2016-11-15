@@ -38,19 +38,25 @@ namespace ClientView
             //Recieves the world parameters in the string builder seperated by \n characters. The first number is the players ID #.
             //the second and third numbers ar the width and height of the world
             String[] worldParameters = ss.sb.ToString().Split('\n');
+
             //Initializes the world
             world = new World(int.Parse(worldParameters[1]), int.Parse(worldParameters[2]));
             gamePanel.SetWorld(world);
+
             //Sets the gamePanel and window to the correct size
             this.Invoke(new MethodInvoker(
             () => gamePanel.Size = new Size(world.width * World.pixelsPerCell, world.height * World.pixelsPerCell)
             ));
+
             this.Invoke(new MethodInvoker(
             () => this.Size = new Size(world.width * World.pixelsPerCell + 50, world.height * World.pixelsPerCell +100 )
             ));
+
             ss.callbackFunction = RecieveWorld;
             Networking.GetData(ss);
 
+            // TODO: We would also need to update this form's size to expand or shrink to fit the panel
+            // this.Size = (large enough to hold all buttons, panels, etc)
         }
 
         private static void RecieveWorld(SocketState ss)
